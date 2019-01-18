@@ -195,7 +195,7 @@ class Player extends Proxy {
   }
 
   destroy () {
-    let parentNode = this.root.parentNode
+    // let parentNode = this.root.parentNode
     clearInterval(this.bulletResizeTimer)
     for (let k in this._interval) {
       clearInterval(this._interval[k])
@@ -218,17 +218,16 @@ class Player extends Proxy {
         }
       })
     }
-    
-    if(this.root.video) {
+    if (this.root.video) {
       this.root.video = null
     }
-    
+
     function pauseFunc () {
       this.emit('destroy')
       // this.root.id = this.root.id + '_del'
       // parentNode.insertBefore(this.rootBackup, this.root)
       // this.video = null
-      parentNode.removeChild(this.root)
+      this.root.parentNode.removeChild(this.root)
       for (let k in this) {
         if (k !== 'config') {
           delete this[k]
@@ -236,7 +235,7 @@ class Player extends Proxy {
       }
       this.off('pause', pauseFunc)
     }
-    
+
     if (!this.paused) {
       this.pause()
       this.once('pause', pauseFunc)
@@ -244,7 +243,7 @@ class Player extends Proxy {
       this.emit('destroy')
       // this.root.id = this.root.id + '_del'
       // parentNode.insertBefore(this.rootBackup, this.root)
-      parentNode.removeChild(this.root)
+      this.root.parentNode.removeChild(this.root)
       for (let k in this) {
         if (k !== 'config') {
           delete this[k]
