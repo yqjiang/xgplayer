@@ -1,6 +1,6 @@
 {
   "name": "xgplayer-hls.js",
-  "version": "1.1.8-canary",
+  "version": "1.1.9-canary.1",
   "description": "xgplayer plugin for hls",
   "main": "./dist/index.js",
   "scripts": {
@@ -31,7 +31,7 @@
   "dependencies": {
     "deepmerge": "^2.0.1",
     "event-emitter": "^0.3.5",
-    "hls.js": "0.12.3-canary.4301"
+    "hls.js": "0.12.3-canary.4313"
   },
   "peerDependency": {
     "xgplayer": "^0.1.0"
