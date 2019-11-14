@@ -4,7 +4,9 @@ import { FetchLoader } from 'xgplayer-loader';
 import { Compatibility } from 'xgplayer-codec';
 import Mp4Remuxer from 'xgplayer-remux/src/mp4/index';
 
-import {Playlist, M3U8Parser, TsDemuxer} from 'xgplayer-demux';
+import Playlist from 'xgplayer-transmuxer-buffer-m3u8playlist';
+import M3U8Parser from 'xgplayer-transmuxer-demux-m3u8';
+import TsDemuxer from 'xgplayer-transmuxer-demux-ts';
 
 const LOADER_EVENTS = EVENTS.LOADER_EVENTS;
 const REMUX_EVENTS = EVENTS.REMUX_EVENTS;

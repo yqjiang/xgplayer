@@ -1,10 +1,12 @@
-import { EVENTS, Mse, Crypto} from 'xgplayer-utils';
+import { EVENTS, Mse, Crypto } from 'xgplayer-utils';
 import { XgBuffer, PreSource, Tracks } from 'xgplayer-buffer';
 import { FetchLoader } from 'xgplayer-loader';
 import { Compatibility } from 'xgplayer-codec';
 import Mp4Remuxer from 'xgplayer-remux/src/mp4/index';
 
-import {Playlist, M3U8Parser, TsDemuxer} from 'xgplayer-demux';
+import Playlist from 'xgplayer-transmuxer-buffer-m3u8playlist';
+import M3U8Parser from 'xgplayer-transmuxer-demux-m3u8';
+import TsDemuxer from 'xgplayer-transmuxer-demux-ts';
 
 const LOADER_EVENTS = EVENTS.LOADER_EVENTS;
 const REMUX_EVENTS = EVENTS.REMUX_EVENTS;
@@ -12,6 +14,7 @@ const DEMUX_EVENTS = EVENTS.DEMUX_EVENTS;
 const HLS_EVENTS = EVENTS.HLS_EVENTS;
 const CRYTO_EVENTS = EVENTS.CRYTO_EVENTS;
 const HLS_ERROR = 'HLS_ERROR';
+
 class HlsLiveController {
   constructor (configs) {
     this.configs = Object.assign({}, configs);
@@ -73,7 +76,7 @@ class HlsLiveController {
     this.on(REMUX_EVENTS.REMUX_ERROR, this._onRemuxError.bind(this));
   }
 
-  _onError(type, mod, err, fatal) {
+  _onError (type, mod, err, fatal) {
     let error = {
       errorType: type,
       errorDetails: `[${mod}]: ${err.message}`,
@@ -101,14 +104,14 @@ class HlsLiveController {
   }
 
   _onDemuxError (mod, error, fatal) {
-    if(fatal === undefined) {
+    if (fatal === undefined) {
       fatal = true;
     }
     this._onError(LOADER_EVENTS.LOADER_ERROR, mod, error, fatal);
   }
 
   _onRemuxError (mod, error, fatal) {
-    if(fatal === undefined) {
+    if (fatal === undefined) {
       fatal = true;
     }
     this._onError(REMUX_EVENTS.REMUX_ERROR, mod, error, fatal);
@@ -124,7 +127,7 @@ class HlsLiveController {
         this._onError('M3U8_PARSER_ERROR', 'M3U8_PARSER', error, false);
       }
 
-      if(!mdata) {
+      if (!mdata) {
         if (this.retrytimes > 0) {
           this.retrytimes--;
           this._preload();
@@ -145,7 +148,7 @@ class HlsLiveController {
         this._context.registry('DECRYPT_BUFFER', XgBuffer)();
         this._context.registry('KEY_BUFFER', XgBuffer)();
         this._tsloader.buffer = 'DECRYPT_BUFFER';
-        this._keyLoader = this._context.registry('KEY_LOADER', FetchLoader)({buffer:'KEY_BUFFER',readtype: 3});
+        this._keyLoader = this._context.registry('KEY_LOADER', FetchLoader)({buffer: 'KEY_BUFFER', readtype: 3});
         this.emitTo('KEY_LOADER', LOADER_EVENTS.LADER_START, this._playlist.encrypt.uri);
       } else {
         this._m3u8Loaded(mdata);
@@ -154,29 +157,29 @@ class HlsLiveController {
       this.retrytimes = this.configs.retrytimes || 3;
       this._playlist.downloaded(this._tsloader.url, true);
       this.emit(DEMUX_EVENTS.DEMUX_START);
-    }  else if (buffer.TAG === 'DECRYPT_BUFFER') {
+    } else if (buffer.TAG === 'DECRYPT_BUFFER') {
       this.retrytimes = this.configs.retrytimes || 3;
       this._playlist.downloaded(this._tsloader.url, true);
       this.emitTo('CRYPTO', CRYTO_EVENTS.START_DECRYPT);
-    } else if (buffer.TAG == 'KEY_BUFFER') {
+    } else if (buffer.TAG === 'KEY_BUFFER') {
       this.retrytimes = this.configs.retrytimes || 3;
       this._playlist.encrypt.key = buffer.shift();
       this._crypto = this._context.registry('CRYPTO', Crypto)({
         key: this._playlist.encrypt.key,
         iv: this._playlist.encrypt.ivb,
         method: this._playlist.encrypt.method,
-        inputbuffer:'DECRYPT_BUFFER',
-        outputbuffer:'TS_BUFFER'
+        inputbuffer: 'DECRYPT_BUFFER',
+        outputbuffer: 'TS_BUFFER'
       });
       this._crypto.on(CRYTO_EVENTS.DECRYPTED, this._onDcripted.bind(this));
     }
   }
 
-  _onDcripted() {
+  _onDcripted () {
     this.emit(DEMUX_EVENTS.DEMUX_START);
   }
 
-  _m3u8Loaded(mdata) {
+  _m3u8Loaded (mdata) {
     if (!this.preloadTime) {
       this.preloadTime = this._playlist.targetduration ? this._playlist.targetduration : 5;
     }

@@ -18,7 +18,7 @@
     "webpack-merge": "^4.2.2",
     "xgplayer-buffer": "^2.2.0-alpha.0",
     "xgplayer-codec": "^2.2.0-alpha.0",
-    "xgplayer-demux": "^2.2.0-alpha.0",
+    "xgplayer-transmuxer-demux-flv": "^2.2.0-alpha.0",
     "xgplayer-loader": "^2.2.0-alpha.0",
     "xgplayer-remux": "^2.2.0-alpha.0",
     "xgplayer-utils": "^2.2.0-alpha.0"

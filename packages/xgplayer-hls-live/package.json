@@ -12,7 +12,9 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
-    "xgplayer-demux": "^2.2.0-alpha.0",
+    "xgplayer-transmuxer-buffer-m3u8playlist": "^2.2.0-alpha.0",
+    "xgplayer-transmuxer-demux-m3u8": "^2.2.0-alpha.0",
+    "xgplayer-transmuxer-demux-ts": "^2.2.0-alpha.0",
     "xgplayer-loader": "^2.2.0-alpha.0",
     "xgplayer-buffer": "^2.2.0-alpha.0",
     "xgplayer-codec": "^2.2.0-alpha.0",

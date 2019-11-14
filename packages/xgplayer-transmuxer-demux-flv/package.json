@@ -1,0 +1,16 @@
+{
+  "name": "xgplayer-transmuxer-demux-flv",
+  "version": "2.2.0-alpha.0",
+  "description": "",
+  "main": "dist/index.js",
+  "scripts": {
+    "build": "babel src --out-dir dist"
+  },
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "xgplayer-buffer": "file:../xgplayer-buffer",
+    "xgplayer-codec": "file:../xgplayer-codec",
+    "xgplayer-utils": "file:../xgplayer-utils"
+  }
+}
